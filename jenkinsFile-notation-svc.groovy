@@ -21,6 +21,9 @@ node('maven') {
   stage 'checkout'
      git branch: sourceRef, url: sourceUrl, credentialsId: githubId, contextDir: contextDirPath
   stage 'build'
+      sh "pwd"
+      sh "ls -ail"
+      sh "ls -ail /tmp/workspace/notation-svc-cicd/notation-svc-cicd-notation-svc-cicd-bc"
      sh "${mvnCmd} clean install -DskipTests=true"
   stage 'test'
     sh "${mvnCmd} test"
