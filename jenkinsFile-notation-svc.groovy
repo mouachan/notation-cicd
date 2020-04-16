@@ -21,9 +21,6 @@ node('maven') {
   stage 'checkout'
      git branch: sourceRef, url: sourceUrl, credentialsId: githubId
   stage 'build'
-     sh "ls -ail"
-     sh "cd notation" 
-     sh "ls -ail"
      sh "${mvnCmd} clean install -DskipTests=true"
   stage 'test'
     sh "${mvnCmd} test"
