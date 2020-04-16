@@ -21,6 +21,7 @@ node('maven') {
   stage 'checkout'
      git branch: sourceRef, url: sourceUrl, credentialsId: githubId, contextDir: contextDirPath
   stage 'build'
+     sh "ls -ail"
      sh "cd notation/dmn-svc-notation" 
      sh "${mvnCmd} clean install -DskipTests=true"
   stage 'test'
