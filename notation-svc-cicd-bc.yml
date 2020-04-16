@@ -1,0 +1,23 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: notation-svc-cicd-bc
+  namespace: notation-svc-cicd
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: {}
+  output: {}
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      ref: master
+      uri: https://github.com/mouachan/notation-cicd.git
+    sourceSecret:
+      name: github
+    type: Git
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: jenkinsFile-notation-svc.groovy
+    type: JenkinsPipeline
