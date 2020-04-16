@@ -24,6 +24,7 @@ node('maven') {
      sh "ls -ail"
      sh "cd notation/dmn-svc-notation" 
      sh "${mvnCmd} clean install -DskipTests=true"
+    sh "cd notation/dmn-svc-notation" 
   stage 'test'
     sh "${mvnCmd} test"
   stage 'deployInDev'
