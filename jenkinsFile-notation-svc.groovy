@@ -2,7 +2,7 @@
 def mvnCmd = "./mvnw"
 // injection of environment variables is not done so set them here...
 def sourceRef = "master"
-def sourceUrl = "https://github.com/mouachan/credit"
+def sourceUrl = "https://github.com/mouachan/dmn-svc-notation.git"
 def githubId = "github"
 def devProject = "credit"
 def artifact = "dmn-svc-notation"
@@ -19,7 +19,7 @@ def registry = "docker-registry.default.svc:5000"
 
 node('maven') {
   stage 'checkout'
-     git branch: sourceRef, url: sourceUrl, credentialsId: githubId, contextDir: contextDirPath
+     git branch: sourceRef, url: sourceUrl, credentialsId: githubId
   stage 'build'
      sh "ls -ail"
      sh "cd notation" 
