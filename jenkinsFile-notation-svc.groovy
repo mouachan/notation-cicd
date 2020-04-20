@@ -26,13 +26,12 @@ node('maven') {
     sh "${mvnCmd} test"
   stage 'deployInDev'
     echo "building container image"
-    sh "${mvnCmd} clean package -Dquarkus.container-image.build=true"
+    sh "${mvnCmd} -X clean package -Dquarkus.container-image.build=true"
     sh "oc process -f ./template/dmn-svc.yml  --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_dev} -f -"
     echo "promoting image"
-	  sh "oc tag ${namespace_dev}/${artifact}:latest ${namespace_acp}/${artifact}:${image_version}"
+	  sh "oc tag ${namespace_dev}/${artifact}:${version} ${namespace_acp}/${artifact}:${image_version}"
   stage 'deployInAcp'
     echo "creating openshift deployment objects"
-	  echo "generating ConfigMap"
     sh "oc process -f ./template/dmn-svc.yml --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_acp} -f -"
 }
 
