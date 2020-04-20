@@ -20,7 +20,7 @@ node('maven') {
   stage 'checkout'
      git branch: sourceRef, url: sourceUrl, credentialsId: githubId
   stage 'build'
-    ech "building"
+    echo "building"
     // sh "${mvnCmd} clean install -DskipTests=true"
   stage 'test'
   echo "test "
