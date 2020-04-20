@@ -20,9 +20,11 @@ node('maven') {
   stage 'checkout'
      git branch: sourceRef, url: sourceUrl, credentialsId: githubId
   stage 'build'
-    # sh "${mvnCmd} clean install -DskipTests=true"
+    ech "building"
+    // sh "${mvnCmd} clean install -DskipTests=true"
   stage 'test'
-   # sh "${mvnCmd} test"
+  echo "test "
+  // sh "${mvnCmd} test"
   stage 'deployInDev'
     echo "building container image"
     sh "${mvnCmd} clean package -Dquarkus.kubernetes.deploy=true -Dquarkus.kubernetes.deployment-target=openshift -Dquarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000 -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true"
