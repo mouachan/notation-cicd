@@ -14,7 +14,6 @@ def namespace_acp = "notation-svc-acp"
 def namespace_prd = "notation-svc-prd"		
 def appname = "dmn-svc-notation"
 def image_version = "1.0.0"
-def registry = "docker-registry.default.svc:5000"
 
 
 node('maven') {
@@ -26,7 +25,7 @@ node('maven') {
     sh "${mvnCmd} test"
   stage 'deployInDev'
     echo "building container image"
-    sh "${mvnCmd} -X clean package -Dquarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000 -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true"
+    sh "${mvnCmd} clean package"
     sh "oc process -f ./template/dmn-svc.yml  --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_dev} -f -"
     echo "promoting image"
 	  sh "oc tag ${namespace_dev}/${artifact}:${version} ${namespace_acp}/${artifact}:${image_version}"
