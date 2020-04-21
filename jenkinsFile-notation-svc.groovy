@@ -28,7 +28,7 @@ node('maven') {
   stage 'deployInDev'
     echo "building container image"
     sh "${mvnCmd} clean package  -DskipTests=true"
-    sh "oc new-build --name ${appname}-bc --binary"
+    sh "oc new-build registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift --name ${appname}-bc --binary"
     sh "oc start-build ${appname}-bc --from-dir ./target --follow"
     sh "oc process -f ./template/dmn-svc.yml  --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_dev} -f -"
     echo "promoting image"
