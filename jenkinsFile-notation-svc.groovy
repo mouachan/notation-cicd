@@ -27,8 +27,8 @@ node('maven') {
      sh "${mvnCmd} test"
   stage 'deployInDev'
     echo "building container image"
-    sh "${mvnCmd} clean package -DskipTests=true"
-    sh "oc start-build --binary=./target/notation-1.0-SNAPSHOT-runner.jar"
+    sh "${mvnCmd} clean package -Dquarkus.container-image.build=true -DskipTests=true"
+    sh "oc start-build --from-file=./target/notation-1.0-SNAPSHOT-runner.jar"
     sh "oc process -f ./template/dmn-svc.yml  --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_dev} -f -"
     echo "promoting image"
 	  sh "oc tag ${namespace_dev}/${artifact}:${version} ${namespace_acp}/${artifact}:${image_version}"
