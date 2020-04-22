@@ -30,7 +30,6 @@ node('maven') {
     echo "building container image"
     sh "${mvnCmd} clean package  -DskipTests=true"
     sh "oc delete all --selector build=${appname} -n ${namespace_cicd}"
-    sh "oc delete is ${appname}"
     sh "oc new-build --name ${appname} --binary"
     sh "oc patch bc/dmn-svc-notation -p \'{\"spec\":{\"strategy\":{\"dockerStrategy\":{\"dockerfilePath\":\"src/main/docker/Dockerfile.jvm\"}}}}\'" 
     sh "ls -ail"
