@@ -29,8 +29,9 @@ node('maven') {
   stage 'deployInDev'
     echo "building container image"
     sh "oc delete all --selector build=${appname} -n ${namespace_cicd}"
-    sh "${mvnCmd} clean package  -DskipTests=true -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000"
-   
+    sh "${mvnCmd} clean package  -DskipTests=true"
+    sh "${mvnCmd} fabric8:build -Dfabric8.namespace=${namespace_dev}"
+  
     //sh "oc new-build --name ${appname} --binary"
     //sh "oc patch bc/dmn-svc-notation -p \'{\"spec\":{\"strategy\":{\"dockerStrategy\":{\"dockerfilePath\":\"src/main/docker/Dockerfile.jvm\"}}}}\'" 
     sh "ls -ail"
