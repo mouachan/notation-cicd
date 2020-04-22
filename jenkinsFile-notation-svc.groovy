@@ -9,6 +9,7 @@ def artifact = "dmn-svc-notation"
 def version = "1.0.0"
 def contextDirPath = "/notation/dmn-svc-notation"
 // namespaces
+def namespace_cicd = "notation-svc-cicd"
 def namespace_dev = "notation-svc-dev"
 def namespace_acp = "notation-svc-acp"
 def namespace_prd = "notation-svc-prd"		
@@ -28,8 +29,8 @@ node('maven') {
   stage 'deployInDev'
     echo "building container image"
     sh "${mvnCmd} clean package  -DskipTests=true"
-    //sh "oc delete bc ${appname}"
-    //sh "oc delete is ${appname}"
+    sh "oc delete all --selector build=${appname} -n ${namespace_cicd}"
+    sh "oc delete is ${appname}"
     sh "oc new-build --name ${appname} --binary"
     sh "oc patch bc/dmn-svc-notation -p \'{\"spec\":{\"strategy\":{\"dockerStrategy\":{\"dockerfilePath\":\"src/main/docker/Dockerfile.jvm\"}}}}\'" 
     sh "ls -ail"
