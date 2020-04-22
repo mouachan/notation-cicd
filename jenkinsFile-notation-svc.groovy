@@ -30,7 +30,7 @@ node('maven') {
     echo "building container image"
     sh "oc delete all --selector build=${appname} -n ${namespace_cicd}"
     sh "${mvnCmd} clean package  -DskipTests=true"
-    sh "oc process -f ./template/dmn-svc-bc.yml  --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_dev} -f -"
+    sh "oc process -f ./template/dmn-svc-bc.yml  | oc apply -n ${namespace_dev} -f -"
     sh "oc start-build dmn-svc-notation-bc --from-dir=./target --follow"
     //sh "oc patch bc/dmn-svc-notation -p \'{\"spec\":{\"strategy\":{\"dockerStrategy\":{\"dockerfilePath\":\"src/main/docker/Dockerfile.jvm\"}}}}\'"     
     echo "promoting image"
