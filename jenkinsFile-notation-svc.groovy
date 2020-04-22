@@ -33,7 +33,7 @@ node('maven') {
     sh "oc new-build --name ${appname} --binary"
     sh "oc patch bc/dmn-svc-notation -p \'{\"spec\":{\"strategy\":{\"dockerStrategy\":{\"dockerfilePath\":\"src/main/docker/Dockerfile\"}}}}\'" 
     sh "ls -ail"
-    sh "oc start-build ${appname} --from-dir=./target --follow"
+    sh "oc start-build ${appname} --from-dir=. --follow"
     sh "oc process -f ./template/dmn-svc.yml  --param APP_NAME=${artifact} --param APP_VERSION=${version} --param IMAGE_VERSION=${image_version} | oc apply -n ${namespace_dev} -f -"
     echo "promoting image"
 	  sh "oc tag ${namespace_dev}/${artifact}:${version} ${namespace_acp}/${artifact}:${image_version}"
