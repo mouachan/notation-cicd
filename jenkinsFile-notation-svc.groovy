@@ -28,7 +28,8 @@ node('maven') {
      sh "${mvnCmd} test"
   stage 'deployInDev'
     echo "building container image"
-    sh "oc delete all --selector build=${appname} -n ${namespace_cicd}"
+    sh "oc delete all --selector build=dmn-svc-notation-bc -n ${namespace_cicd}"
+        sh "oc delete all --selector build=dmn-svc-notation-bc -n ${namespace_dev}"
     sh "${mvnCmd} clean package  -DskipTests=true"
     sh "oc process -f ./template/dmn-svc-bc.yml  | oc apply -n ${namespace_dev} -f -"
     sh "oc start-build dmn-svc-notation-bc -n ${namespace_dev} --from-file=./target/notation-1.0-SNAPSHOT.jar"
